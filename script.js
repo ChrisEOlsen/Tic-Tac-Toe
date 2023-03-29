@@ -25,13 +25,63 @@ const controls = (() => {
         if (e.target.dataset.id == undefined) return
         gameBoard.gameArray.splice(e.target.dataset.id, 1, iconChoice)
         gameBoard.drawGame()
-        //TODO: activate computer move here
+        //Activate computer move here
+        setTimeout(() => aiLogic.findBestMove(), 400)
       })
     })
   }
   return { activatePlayerEvents, iconX, iconO }
 })()
 
-const aiLogic = (() => {})()
+const aiLogic = (() => {
+  //this will be the index of the best move - defined inside scanWinScenarios()
+  let blockIndex
+  const winScenarios = ["012", "345", "678", "036", "147", "258", "048", "246"]
+  let gameOver = false
+
+  const scanWinScenarios = icon => {
+    for (let i = 0; i < winScenarios.length; i++) {
+      let line = winScenarios[i].split("")
+      let count = 0
+      let excluded = []
+      for (let x = 0; x < line.length; x++) {
+        gameBoard.gameArray[line[x]] == icon ? count++ : excluded.push(line[x])
+        if (count == 2 && gameBoard.gameArray[excluded] == "") blockIndex = excluded[0]
+      }
+    }
+  }
+
+  const findBestMove = () => {
+    let emptySpaces = []
+    //find and save all empty spaces
+    for (let i = 0; i < gameBoard.gameArray.length; i++) {
+      if (gameBoard.gameArray[i] == "") emptySpaces.push(i)
+    }
+
+    //CHECK WIN X
+
+    //game over if board is full
+    if (emptySpaces.length == 0) return console.log("full")
+    //check if immediate win is possible
+    scanWinScenarios(controls.iconO)
+    //if not possible, then check for necessary block move
+    if (blockIndex == undefined) scanWinScenarios(controls.iconX)
+    //execute block index
+    if (blockIndex != undefined) {
+      gameBoard.gameArray.splice(blockIndex, 1, controls.iconO)
+    } else {
+      //choose center by default to increase win chance
+      if (gameBoard.gameArray[4] == "") gameBoard.gameArray.splice(4, 1, controls.iconO)
+      else gameBoard.gameArray.splice(emptySpaces[Math.floor(Math.random() * emptySpaces.length)], 1, controls.iconO)
+    }
+
+    //CHECK WIN O
+
+    gameBoard.drawGame()
+    blockIndex = undefined
+  }
+  //check for wins here
+  return { findBestMove }
+})()
 
 controls.activatePlayerEvents(controls.iconX)
