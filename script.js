@@ -85,7 +85,7 @@ const aiLogic = (() => {
       if (gameBoard.gameArray[i] == "") emptySpaces.push(i)
     }
     //game over if board is full or X has won
-    if (emptySpaces.length == 0) return gameBoard.endGame("It's a Draw")
+    if (emptySpaces.length == 0) return gameBoard.endGame("Draw")
     else if (checkWin(controls.iconX)) return gameBoard.endGame("You Won")
     //check if immediate win is possible
     scanWinScenarios(controls.iconO)
