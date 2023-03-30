@@ -8,6 +8,10 @@
   --cell-size: 100px;
 }
 
+html {
+  height: -webkit-fill-available;
+}
+
 body {
   margin: 0;
   display: flex;
@@ -19,7 +23,9 @@ body {
 
 .game-board {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
   display: grid;
   justify-content: center;
   align-content: center;
