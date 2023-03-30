@@ -8,10 +8,6 @@
   --cell-size: 100px;
 }
 
-html {
-  height: -webkit-fill-available;
-}
-
 body {
   margin: 0;
   display: flex;
@@ -20,9 +16,7 @@ body {
   position: relative;
   font-family: monospace;
   width: 100vw;
-  height: 100vh;
-  /* mobile viewport bug fix */
-  height: -webkit-fill-available;
+  height: 100dvh;
 }
 
 .game-board {
@@ -87,4 +81,5 @@ body {
   outline: none;
   border: none;
   font-family: monospace;
+  color: black;
 }
