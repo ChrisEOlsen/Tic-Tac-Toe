@@ -32,12 +32,12 @@ const controls = (() => {
   const iconO = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="white" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8s8 3.58 8 8s-3.58 8-8 8z"/></svg>`
   let active = false
 
-  const activatePlayerEvents = () => {
+  const activatePlayerEvents = iconChoice => {
     gameBoard.cells.forEach(cell => {
       cell.addEventListener("click", e => {
         if (controls.active) return
         if (e.target.dataset.id == undefined) return
-        gameBoard.gameArray.splice(e.target.dataset.id, 1, controls.iconX)
+        gameBoard.gameArray.splice(e.target.dataset.id, 1, iconChoice)
         gameBoard.drawGame()
         //Activate computer move here
         controls.active = true
@@ -109,4 +109,4 @@ const aiLogic = (() => {
   return { findBestMove }
 })()
 
-controls.activatePlayerEvents(controls.iconX)
+controls.activatePlayerEvents(controls.iconX) // this function can be used to allow for icon change later on
