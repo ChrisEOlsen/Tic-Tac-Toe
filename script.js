@@ -37,7 +37,6 @@ const aiLogic = (() => {
   //this will be the index of the best move - defined inside scanWinScenarios()
   let blockIndex
   const winScenarios = ["012", "345", "678", "036", "147", "258", "048", "246"]
-  let gameOver = false
 
   const scanWinScenarios = icon => {
     for (let i = 0; i < winScenarios.length; i++) {
@@ -51,6 +50,18 @@ const aiLogic = (() => {
     }
   }
 
+  const checkWin = icon => {
+    for (let i = 0; i < winScenarios.length; i++) {
+      let line = winScenarios[i].split("")
+      let count = 0
+      for (let x = 0; x < line.length; x++) {
+        if (gameBoard.gameArray[line[x]] == icon) count++
+      }
+      if (count > 2) return true
+    }
+    return false
+  }
+
   const findBestMove = () => {
     let emptySpaces = []
     //find and save all empty spaces
@@ -58,10 +69,8 @@ const aiLogic = (() => {
       if (gameBoard.gameArray[i] == "") emptySpaces.push(i)
     }
 
-    //CHECK WIN X
-
-    //game over if board is full
-    if (emptySpaces.length == 0) return console.log("full")
+    //game over if board is full or X has won
+    if (emptySpaces.length == 0 || checkWin(controls.iconX)) return console.log("x wins")
     //check if immediate win is possible
     scanWinScenarios(controls.iconO)
     //if not possible, then check for necessary block move
@@ -75,10 +84,10 @@ const aiLogic = (() => {
       else gameBoard.gameArray.splice(emptySpaces[Math.floor(Math.random() * emptySpaces.length)], 1, controls.iconO)
     }
 
-    //CHECK WIN O
-
     gameBoard.drawGame()
     blockIndex = undefined
+    //CHECK WIN O
+    if (checkWin(controls.iconO)) console.log("o wins") //TODO: make win function
   }
   //check for wins here
   return { findBestMove }
