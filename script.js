@@ -94,7 +94,9 @@ const aiLogic = (() => {
     if (blockIndex != undefined) {
       gameBoard.gameArray.splice(blockIndex, 1, controls.iconO)
     } else {
-      gameBoard.gameArray.splice(emptySpaces[Math.floor(Math.random() * emptySpaces.length)], 1, controls.iconO)
+      //choose center by default to increase win chance
+      if (gameBoard.gameArray[4] == "") gameBoard.gameArray.splice(4, 1, controls.iconO)
+      else gameBoard.gameArray.splice(emptySpaces[Math.floor(Math.random() * emptySpaces.length)], 1, controls.iconO)
     }
     gameBoard.drawGame()
     blockIndex = undefined
