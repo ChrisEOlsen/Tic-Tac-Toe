@@ -15,8 +15,10 @@ const gameBoard = (() => {
     const endGameScreen = document.querySelector(".winning-message")
     const endGamemessage = document.querySelector(".message-text")
     const resetButton = document.getElementById("restartButton")
+
     endGameScreen.style.display = "flex"
     endGamemessage.textContent = msg
+
     resetButton.addEventListener("click", () => {
       gameBoard.gameArray = ["", "", "", "", "", "", "", "", ""]
       gameBoard.drawGame()
@@ -92,9 +94,7 @@ const aiLogic = (() => {
     if (blockIndex != undefined) {
       gameBoard.gameArray.splice(blockIndex, 1, controls.iconO)
     } else {
-      //choose center by default to increase win chance
-      if (gameBoard.gameArray[4] == "") gameBoard.gameArray.splice(4, 1, controls.iconO)
-      else gameBoard.gameArray.splice(emptySpaces[Math.floor(Math.random() * emptySpaces.length)], 1, controls.iconO)
+      gameBoard.gameArray.splice(emptySpaces[Math.floor(Math.random() * emptySpaces.length)], 1, controls.iconO)
     }
     gameBoard.drawGame()
     blockIndex = undefined
