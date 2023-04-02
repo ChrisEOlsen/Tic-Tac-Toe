@@ -78,29 +78,26 @@ const aiLogic = (() => {
   }
 
   const findBestMove = () => {
-    let emptySpaces = []
-    //find and save all empty spaces
-    for (let i = 0; i < gameBoard.gameArray.length; i++) {
-      if (gameBoard.gameArray[i] == "") emptySpaces.push(i)
-    }
-    //game over if board is full or X has won
-    if (emptySpaces.length == 0) return gameBoard.endGame("Draw")
+    const emptySpaces = gameBoard.gameArray.reduce((arr, curr, index) => {
+      if (curr === "") arr.push(index)
+      return arr
+    }, [])
+
+    if (!emptySpaces.length) return gameBoard.endGame("Draw")
     else if (checkWin(controls.iconX)) return gameBoard.endGame("You Won")
-    //check if immediate win is possible
+
+    //Check if immediate win is possible
     scanWinScenarios(controls.iconO)
-    //if not possible, then check for necessary block move
-    if (blockIndex == undefined) scanWinScenarios(controls.iconX)
-    //execute block index
-    if (blockIndex != undefined) {
-      gameBoard.gameArray.splice(blockIndex, 1, controls.iconO)
-    } else {
-      //choose center by default to increase win chance
-      if (gameBoard.gameArray[4] == "") gameBoard.gameArray.splice(4, 1, controls.iconO)
-      else gameBoard.gameArray.splice(emptySpaces[Math.floor(Math.random() * emptySpaces.length)], 1, controls.iconO)
-    }
+    //If not possible, check if player must be blocked
+    if (!blockIndex) scanWinScenarios(controls.iconX)
+    //Execute if either moves above are valid
+    if (blockIndex !== undefined) gameBoard.gameArray.splice(blockIndex, 1, controls.iconO)
+    //If not, then default to center or make a random move
+    else if (gameBoard.gameArray[4] === "") gameBoard.gameArray.splice(4, 1, controls.iconO)
+    else gameBoard.gameArray.splice(emptySpaces[Math.floor(Math.random() * emptySpaces.length)], 1, controls.iconO)
+
     gameBoard.drawGame()
     blockIndex = undefined
-    //CHECK WIN O
     if (checkWin(controls.iconO)) gameBoard.endGame("You Lost")
   }
 
